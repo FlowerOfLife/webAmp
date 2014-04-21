@@ -5,153 +5,31 @@
     { 
     background-color:yellow;
     }
+    .playing
+    { 
+    background-color:yellow;
+    }
 </style>
 
 
-<div id='test'></div>
-<script>
-    //audio object
-
-   var audio = document.createElement('audio');
-    audio.controls="true";
-    audio.id="audioElementId"; 
-    //append
-    var test = document.getElementById('test');
-    test.appendChild(audio);
-    var playlist = {
-        controlles:function(){
-            var buttonPlay = document.getElementById('buttonPlay');
-            var buttonStop = document.getElementById('buttonStop');
-            var buttonForword = document.getElementById('buttonForword');
-            var buttonbackword = document.getElementById('buttonbackword');
-            buttonPlay.onclick = function(){
-            
-            }
-        },
-        addAudioToPlayer:function(treckSrc){
-        audio.src = treckSrc;
-        },
-        openFiles:function(){
-        var openFileButton = document.createElement('input');
-            openFileButton.type = 'file';
-            openFileButton.multiple = true;
-            openFileButton.id = 'openFileButton';
-            openFileButton.onchange = (function(){
-                
-                var audioFiles = this.files;    
-               
-                var playlistFiles=[];
-                for(afile in audioFiles){
-                (function(afile){
-                        if(!isNaN(afile)){
-                        var audiofile = URL.createObjectURL(audioFiles[afile]);
-                        
-         playlistFiles.push({path:audiofile,duration:audio.duration,fileObject:audioFiles[afile]});  
-                         //audio.src = audiofile;
-                          //  playlist.addAudioToPlayer(audiofile)                    
-                        }
-                })(afile)
-                }
-               playlist.addFilesToPlayList(playlistFiles); 
-            })
-            return openFileButton;
-        },
-        addFilesToPlayList:function(files){
-    function readableDuration(seconds) {
-    sec = Math.floor( seconds );    
-    min = Math.floor( sec / 60 );
-    min = min >= 10 ? min : '0' + min;    
-    sec = Math.floor( sec % 60 );
-    sec = sec >= 10 ? sec : '0' + sec;    
-    return min + ':' + sec;
-}
-
-            
-            var playlistTable = document.getElementById('palylist');
-            var trecks = [];
-            for(file in files){
-    
-                (function(file,files){
-                    
-                    //audioTreckInfo.duration = audio.duration;
-                    console.log(files[file]);
-                    
-     id3(files[file].fileObject, function(err, tags) {
-            var tr = function(){return document.createElement('tr')};
-            var td = function(){return document.createElement('td')};
-            var tdTitle = new td;
-            var tdArtist = new td;
-            var tdTreckDuration = new td;
-            var tr = new tr;
-         trecks.push(files[file].fileObject)
-         //console.log(files[file])
-         tr.onmouseover=function(){this.style.fontWeight='bold'}
-         tr.onmouseout=function(){this.style.fontWeight=''}
-         tr.ondblclick=function(){
-             var wavesurfer = Object.create(WaveSurfer);
-    
-    
-    var wavesurfer = wavesurfer;
-    wavesurfer.init({
-    container: document.querySelector('#wave'),
-    waveColor: '#ebff00',
-    progressColor: '#ff8f0d',
-    height:'100',
-    minPxPerSec:5,
-    fillParent: true,
-});
-
-wavesurfer.on('ready', function () {
-    wavesurfer.play();
-});
-
-wavesurfer.load(URL.createObjectURL(files[file].fileObject));
-            audio.src = URL.createObjectURL(files[file].fileObject); 
-             console.log(files[file].fileObject); 
-             //audio.play();
-             audio.onloadeddata=(function(){
-             tdTreckDuration.textContent = readableDuration(audio.duration); 
-             })
-         }
-            tr.appendChild(tdTitle);
-            tr.appendChild(tdArtist);
-         tr.appendChild(tdTreckDuration);
-            tdTitle.textContent = tags.title;//files[file].path;
-            tdArtist.textContent = tags.artist;
-            tdTreckDuration.textContent = files[file].duration;
-                playlistTable.appendChild(tr)
-    //console.log(err);
-   // console.log(tags);
-     });
-        
-                }
-                )(file,files)
-            }
-               // audio.src = files[0].path;
-    
-        }
-    }
-    test.appendChild(playlist.openFiles());
-    window.onload = (function(){
-        var audio_file = document.getElementById('audio_file');
-    })
-</script>
-
+<div id='Panel'></div>
+<script src="index.js"></script>
 <audio id="audio_player"></audio>
-<table id=palylist border="solid black 1px">
+<input id='openFileButton' type='file' multiple=true>
+<table id=playListTable border="solid black 1px">
     <tr>
+        <th>No</th>
         <th>Title</th>
         <th>artist</th>
         <th>time</th>
     </tr>
 </table>
 <div id='wave'></div>
+<div id='progress-bar'></div>
 <button id='buttonPlay'>Play</button>
-<button id='buttonStop'>stop</button>
-<button id='buttonBackword'><-</button>
-<button id='buttonForword'>-></button>
+<button id='buttonStop'>Stop</button>
+<button id='buttonPause'>Pause</button>
+<button id='buttonBackword'>back</button>
+<button id='buttonForword'>forword</button>
 
-
-
-'>-></button>
 
