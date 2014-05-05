@@ -1,35 +1,104 @@
 <script src="id3.min.js"></script>
 <script src="wavesurfer.min.js"></script>
+<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<script src="waveform.js"></script>
 <style>
-    #playlist
-    { 
-    background-color:yellow;
+
+/* Play */
+#panel
+{
+  width:500px;
+background:
+radial-gradient(black 15%, transparent 16%) 0 0,
+radial-gradient(black 15%, transparent 16%) 8px 8px,
+radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+background-color:#282828;
+background-size:16px 16px;
+};
+
+    table
+    {
+      
+    border-collapse:collapse;
     }
-    .playing
-    { 
-    background-color:yellow;
-    }
+
+        #playlistTable {
+          
+          color: red;
+          background-color: lawngreen;
+          text-decoration: none;
+          font-family: 'Gruppo', cursive;
+          border: solid black 1px;
+          font-weight: 900;
+          font-size: 17px;
+          width: 500;
+        }
+        
+            .Playing
+            {
+            color:darkred;
+            
+            }
+            .treckProgressBar {
+            -webkit-appearance: none;
+            background-color: silver;
+            width: 100%;
+            height:30px;
+            
+        
+        }
+            .playlistTable{
+                width: 400;
+            }
+            .timer{
+             font-size: 51px;
+              color: crimson;
+              background-color: lawngreen;
+              font-family: monospace;
+            }
 </style>
+<style src="index.css"></style>
+<link href='http://fonts.googleapis.com/css?family=Gruppo' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="index.css">
+<script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 
 
-<div id='Panel'></div>
+<div id='Panel'>
 <script src="index.js"></script>
 <audio id="audio_player"></audio>
-<input id='openFileButton' type='file' multiple=true>
-<table id=playListTable border="solid black 1px">
-    <tr>
-        <th>No</th>
-        <th>Title</th>
-        <th>artist</th>
-        <th>time</th>
-    </tr>
-</table>
-<div id='wave'></div>
-<div id='progress-bar'></div>
-<button id='buttonPlay'>Play</button>
-<button id='buttonStop'>Stop</button>
-<button id='buttonPause'>Pause</button>
-<button id='buttonBackword'>back</button>
-<button id='buttonForword'>forword</button>
+<br>
+<div id='timer' class='timer'>00:00</div>
+<div><input type="range" id="volume" min=1 max=100></div>
+<br>
+<input type="range" min="0" max="0" class="treckProgressBar" id="treckProgressBar" />
 
+
+<div id='progress-bar' class='button'></div>
+<button id='buttonPlay' class='button'><i class="fa fa-play"></i></button>
+<button id='buttonStop' class='button'><i class="fa fa-stop"></i></button>
+<button id='buttonPause' class='button'><i class="fa fa-pause"></i></button>
+<button id='buttonBackword' class='button'><i class="fa fa-backward"></i></button>
+<button id='buttonForword'><i class="fa fa-forward"></i></button>
+<input id='openFileButton' type='file' multiple=true class="fa fa-eject">
+<br>
+
+
+<table id=playListTable class="playlistTable">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Title</th>
+            <th>artist</th>
+            <th>time</th>
+        </tr>
+    </thead>
+    <tbody id='tbody'>
+
+    </tbody>
+</table>
+
+</div>
+<div id='wave'></div>
+<div id='test'></div>
 

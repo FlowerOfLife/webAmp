@@ -1,6 +1,6 @@
     //audio object
     window.onload = (function () {
-
+        /*
         var wavesurfer = Object.create(WaveSurfer);
         var wavesurfer = wavesurfer;
         wavesurfer.init({
@@ -11,12 +11,12 @@
             minPxPerSec: 5,
             fillParent: true
         });
-
-
+*/
+                var editProgressBar = true;
         //Define Objects
         //Audio Object
         var audio = document.createElement('audio');
-        audio.controls = "true";
+        //audio.controls = "true";
         audio.id = "audioElementId";
         //Main Panel
         var Panel = document.getElementById('Panel');
@@ -24,20 +24,26 @@
         Panel.appendChild(audio);
         var playlist = {
 
+            setTimer: function (timeInSec) {
+                var timer = document.getElementById('timer');
+                timer.innerText = playlist.readableDuration(timeInSec);
+
+            },
             controlles: function () {
-                //Controlls Buttons events 
+                //Controlls Buttons events
                 var buttonPlay = document.getElementById('buttonPlay');
                 var buttonStop = document.getElementById('buttonStop');
                 var buttonForword = document.getElementById('buttonForword');
                 var buttonbackword = document.getElementById('buttonBackword');
                 //Play
                 buttonPlay.onclick = function () {
-                    wavesurfer.play();
+                    audio.play();
                 };
                 //Stop
                 buttonStop.onclick = function () {
                     console.log("POU")
-                    wavesurfer.pause();
+                    //wavesurfer.pause();
+                    audio.pause();
                 };
                 //Forword
                 buttonForword.onclick = function () {
@@ -55,12 +61,10 @@
 
             addAudioToPlayer: function (treckSrc) {
                 //Add audio file to playlist
-                //var treckSrc = file bulb src
                 audio.src = treckSrc;
             },
 
             addTracksNumbers: function (playingTrackId) {
-                console.log(playingTrackId)
                 //Count trecks
                 var rows = document.getElementById('playListTable').getElementsByTagName('TR');
                 for (var i = 1; i < rows.length; i++) {
@@ -94,26 +98,40 @@
 
             processFiles: function (files, callback) {
                 //ptocess files
-                for (file in files) {
+
+                for (var file = 0; file < files.length; file++) {
                     (function (file, files) {
-                        if (!isNaN(file)) {
-                            //Get file Data
-                            playlist.getTreckData(files[file], function (treckData) {
-                                //Add to playlisy table
-                                playlist.addTrackToPlaylistTable(treckData);
-                            });
-                        }
+
+
+                        //Get file Data
+                        playlist.getTreckData(files[file], function (treckData) {
+                            //Add to playlisy table
+                            playlist.addTrackToPlaylistTable(treckData);
+                        });
+
                     })(file, files)
                 }
 
             },
+            volumeInput:function(){
+              var volume = document.getElementById('volume');
+              volume.onmousedown= function(){
+                volume.onmousemove= function(){
+                audio.volume=this.value/100;
+                }
+              }
+            },
             getTreckData: function (file, callback) {
-                id3(file, function (err, tags) {
-                    var treck = new playlist.treckEntety();
-                    treck.file = file;
-                    treck.id3Tags = tags;
-                    callback(treck);
-                })
+                try {
+                    id3(file, function (err, tags) {
+                        var treck = {};
+                        treck.file = file;
+                        treck.id3Tags = tags;
+                        callback(treck);
+                    })
+                } catch (e) {
+                    console.log(e)
+                }
             },
             readableDuration: function (seconds) {
                 sec = Math.floor(seconds);
@@ -136,6 +154,7 @@
                 var tdArtist = new td;
                 var tdTreckDuration = new td;
                 var tr = new tr;
+                var tb = document.getElementById('tbody')
                 //console.log(files[file])
                 tr.onmouseover = function () {
                     this.style.fontWeight = 'bold'
@@ -145,8 +164,9 @@
                 }
                 //tr.id = files[file];
                 tr.ondblclick = function () {
+
                     tr.className = "playing";
-                    document.querySelector('#wave')
+                    console.log(this)
                     playlist.playTrack(treck.file, tr.id);
 
                 }
@@ -157,51 +177,76 @@
                 tdTitle.textContent = treck.id3Tags.title;
                 //files[file].path;
                 tdArtist.textContent = treck.id3Tags.artist;
-                //tdTreckDuration.textContent = files[file].duration;
-                playlistTable.appendChild(tr)
-
+                tb.appendChild(tr);
+                //playlistTable.appendChild(tr)
+                playlist.addTracksNumbers()
             },
             treckEntety: function () {
                 this.file;
                 this.id3Tags;
                 return this;
             },
+            setupProgressBar: function (min, max) {
+                // setup progressbar
+                progressBar = document.getElementById('trackProgressBar');
+                progressBar.min = min;
+                progressBar.max = max;
+
+            },
             playTrack: function (trackObjrct, tdId) {
-                playlist.addTracksNumbers()
+              playlist.volumeInput();
+                //numirate tracks for forword/back
+                playlist.addTracksNumbers();
+                //change class played file
                 playlist.addPlayStopCssClass(tdId);
-                // Play after treck was loaded to wavesurfer
-                (function () {
-                    var progressDiv = document.querySelector('#progress-bar');
-                    var progressBar = progressDiv.querySelector('.progress-bar');
-
-                    var showProgress = function (percent) {
-                        console.log(percent)
-                        if (percent == 100) {
-                            // console.log('loaded');
-                            wavesurfer.play()
-                        }
-                        //progressDiv.style.display = 'block';
-                        //progressBar.style.width = percent + '%';
-                    };
-
-                    var hideProgress = function () {
-                        progressDiv.style.display = 'none';
-                    };
-
-                    wavesurfer.on('loading', showProgress);
-                    wavesurfer.on('ready', hideProgress);
-                    wavesurfer.on('destroy', hideProgress);
-                    wavesurfer.on('error', hideProgress);
-                }());
-
-                wavesurfer.on('ready', function () {
-                    wavesurfer.play();
-                    //wavesurfer.createDrawer();
-                    console.log(wavesurfer.getDuration())
+                //play audio element
+                audio.src = URL.createObjectURL(trackObjrct);
+                audio.volume = 0.01;
+                
+                audio.addEventListener('loadedmetadata', function () {
+                    progressBar.max = audio.duration;
+                    audio.play();
                 });
-                // wavesurfer load track bolb url
-                wavesurfer.load(URL.createObjectURL(trackObjrct));
-                //audio.src = URL.createObjectURL(trackObjrct);
+                //setup progress bar
+                progressBar = document.getElementById('treckProgressBar');
+
+  var waveform = new Waveform({
+    container: document.getElementById("test"),
+    innerColor: "#333"
+  });
+
+  waveform.dataFromSoundCloudTrack(audio.src);
+  var streamOptions = waveform.optionsForSyncedStream();
+
+
+
+                //   progressBar.onmouseup = function () {
+                //       audio.currentTime = this.value;
+                //   }
+                progressBar.onmouseup = function () {
+                    progressBar.onmousemove = '';
+                    editProgressBar = true;
+                    audio.currentTime = this.value;
+
+                }
+                progressBar.onmousedown = function () {
+                    editProgressBar = false;
+                    playlist.setTimer(this.value)
+                    progressBar.onmousemove = function () {
+                        //editProgressBar = false;
+                        playlist.setTimer(this.value)
+                    }
+                }
+
+
+                audio.addEventListener('timeupdate', function (duration) {
+                    if (editProgressBar == true) {
+                        progressBar.value = audio.currentTime;
+                        playlist.setTimer(audio.currentTime)
+                        //console.log(audio.currentTime);
+                    }
+                });
+                
             }
         }
 
@@ -209,6 +254,9 @@
         playlist.openFiles()
         //  Panel.appendChild(playlist.openFiles());
         window.onload = (function () {
+          
+          
+          
             console.log('PPPPPCCC');
             var audio_file = document.getElementById('audio_file');
         })
