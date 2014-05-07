@@ -4,54 +4,70 @@
 <script src="waveform.js"></script>
 <style src="index.css"></style>
 <link href='Gruppo-Regular.ttf' rel='stylesheet' type='text/css'>
+<link href='Digital.ttf' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="index.css">
 <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 
 
 <div id='Panel'>
-	<script src="index.js"></script>
-	<audio id="audio_player"></audio>
-	<br>
-	<div id='timer' class='timer'>00:00</div>
-	<div>
-		<input type="range" id="volume" min=1 max=100>
-	</div>
-	<br>
-	<div id='wave'></div>
-	<br>
-	<input type="range" min="0" max="0" class="treckProgressBar" id="treckProgressBar" />
+    <script src="index.js"></script>
+    <audio id="audio_player"></audio>
+    <div id='timer' class='timer'>00:00</div>
+    <div>
+        <canvas id="analyser_render"></canvas>
+    </div>
+    <div>
+        <input type="range" id="volume" min=1 max=100>
+    </div>
+    <br>
+    <div id='wave'></div>
+    <div id="rangeDiv">
+        <input type="range" min="0" max="0" class="treckProgressBar" id="treckProgressBar" />
+    </div>
+    <div id='progress-bar'></div>
 
+    <button id='buttonPlay' class='button'>
+        <i class="fa fa-play"></i>
+    </button>
+    <button id='buttonStop' class='button'>
+        <i class="fa fa-pause"></i>
+    </button>
+    <button id='buttonBackword' class='button'>
+        <i class="fa fa-backward"></i>
+    </button>
+    <button id='buttonForword'>
+        <i class="fa fa-forward"></i>
+    </button>
+    <button id='inputFileDiv' class="fa fa-eject" align="down">
+    </button>
+    <br>
 
-	<div id='progress-bar' class='button'></div>
-	<button id='buttonPlay' class='button'><i class="fa fa-play"></i>
-	</button>
-	<button id='buttonStop' class='button'><i class="fa fa-stop"></i>
-	</button>
-	<button id='buttonPause' class='button'><i class="fa fa-pause"></i>
-	</button>
-	<button id='buttonBackword' class='button'><i class="fa fa-backward"></i>
-	</button>
-	<button id='buttonForword'><i class="fa fa-forward"></i>
-	</button>
-	<input id='openFileButton' type='file' multiple=true class="fa fa-eject">
-	<br>
+    <script>
+    </script>
+    <table id=playListTable class="playlistTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Title</th>
+                <th>artist</th>
+                <th>time</th>
+            </tr>
+        </thead>
+        <tbody id='tbody'>
 
-
-	<table id=playListTable class="playlistTable">
-		<thead>
-			<tr>
-				<th>No</th>
-				<th>Title</th>
-				<th>artist</th>
-				<th>time</th>
-			</tr>
-		</thead>
-		<tbody id='tbody'>
-
-		</tbody>
-	</table>
+        </tbody>
+    </table>
 
 </div>
-
+<input id='openFileButton' type='file' multiple=true>
 <div id='test'></div>
 
+<!doctype html>
+<html>
+
+<head>
+
+</head>
+
+
+</html>

@@ -1,0 +1,36 @@
+<html>
+
+<body></body>
+<script>
+    // Create an <audio> element dynamically.
+var audio = new Audio();
+audio.src = "/home/sasha/Downloads/FINALSET2014/1/001 - 12-booka_shade--das_letzte_mal_(the_last_time)_(with_michi_beck)-oma.mp3";
+audio.controls = true;
+audio.autoplay = true;
+document.body.appendChild(audio);
+
+var context = new webkitAudioContext();
+var analyser = context.createAnalyser();
+
+// Wait for window.onload to fire. See crbug.com/112368
+window.addEventListener('load', function(e) {
+  // Our <audio> element will be the audio source.
+    var source = context.createMediaElementSource(audio);
+		source.connect(analyser);
+		analyser.connect(context.destination);
+        console.log('ssss')
+
+
+        setInterval(function(){
+        var fftData = new Uint8Array(analyser.frequencyBinCount);
+        fbc_array = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(fbc_array);
+        console.log(fbc_array);
+            console.log(fftData);
+    },1000)
+
+  // ...call requestAnimationFrame() and render the analyser's output to canvas.
+}, false);
+</script>
+
+</html>
