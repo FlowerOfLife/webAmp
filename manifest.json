@@ -1,0 +1,14 @@
+{
+	"name": "WebAmp",
+	"description": "My first Chrome App.",
+	"version": "2.0",
+	"app": {
+		"background": {
+			"scripts": ["background.js"]
+		}
+	},
+	"icons": {
+		"16": "smile.png",
+		"128": "smile.png"
+	}
+}
