@@ -1,6 +1,6 @@
 {
 	"name": "WebAmp",
-	"description": "My first Chrome App.",
+	"description": "Audio Player in html5",
 	"version": "2.0",
 	"app": {
 		"background": {
