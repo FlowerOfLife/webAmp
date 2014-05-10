@@ -7,12 +7,23 @@
     src: url(Digital.ttf);
 }
 button {
-    color: dimgray;
+    color: black;
     font-size: 19px;
-    background-color: darkgrey;
-    width: 33px;
-    height: 33px;
-    border-radius: 10px;
+    background-color: rgb(237, 237, 247);
+    width: 62px;
+    height: 23px;
+    border-radius: 0px;
+    border-width: 0;
+    box-shadow: 0px 0px 0px 1px #7A9194;
+    margin: 4px;
+    transition: 300 box-shadow;
+}
+button:active {
+    color: white;
+}
+
+button:hover {
+    box-shadow: 0px 0px 0px 0px;
 }
 #wave {
     float: left;
@@ -26,9 +37,11 @@ button {
 }
 #inputFileDiv {} #panel {
     width: 500px;
-    background: radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 8px 9px;
-    background-color: #282828;
+    /* background: radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255, 255, 255, .1) 15%, transparent 20%) 8px 9px; */
+    background-color: rgb(241, 241, 229);
     background-size: 16px 16px;
+    border-style: solid;
+    border-color: black;
 }
 ;
  table {
@@ -43,7 +56,7 @@ tr:hover {
 }
 #playlistTable {
     color: red;
-    background-color: #76ed00;
+    background-color: #FFFFFF;
     text-decoration: none;
     font-family: 'Gruppo', cursive;
     border: solid black 1px;
@@ -55,36 +68,49 @@ tr:hover {
     color: darkred;
     font-weight: 900;
 }
-#analyser_render {
-    width: 500px;
-    height: 85px;
+#analyser_render_canvas {
+    width: 264px;
+    height: 88px;
     float: right;
-    background: #002D3C;
+    background: aliceblue;
+    margin: 10px;
+    border-style: solid;
+    border-color: rgb(37, 37, 31);
 }
 .treckProgressBar {
     float: left;
     -webkit-appearance: none;
-    background-color: #9a9a9a;
+    background-color: #303030;
     width: 99%;
-    height: 21px;
+    height: 7px;
     border-style: solid;
     color: black;
-    border-width: 3px;
+    border-width: 1px;
     border-radius: 5px;
-    border-color: #0f0;
+    border-color: #181818;
+    box-shadow: inset 0 0 21px #333;
+}
+
+.treckProgressBar:slider-thumb {
+  width:20px;
 }
 .playlistTable {
     width: 400;
 }
 .timer {
     float: left;
-    margin-left: 10px;
+    margin: 10px;
     font-size: 51px;
     color: #14dc14;
-    background-color: #0f1f00;
+    background-color: aliceblue;
     font-family: Digital;
     width: 120px;
     border-width: 3px;
     border-radius: 5px;
     border-color: #0f0;
+    box-shadow: 1px 1px 1px 1px black;
+}
+
+#treckProgressBar{
+  width:300px;
 }

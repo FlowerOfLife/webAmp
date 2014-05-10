@@ -2,30 +2,33 @@
 <script src="wavesurfer.min.js"></script>
 <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
 <script src="waveform.js"></script>
-<style src="index.css"></style>
+<!--<style src="index.css"></style>-->
+<style src="theme1.css"></style>
+
 <link href='Gruppo-Regular.ttf' rel='stylesheet' type='text/css'>
 <link href='Digital.ttf' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="index.css">
+<link rel="stylesheet" type="text/css" href="theme1.css">
 <script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 
+<style>
 
+</style>
 <div id='Panel'>
     <script src="index.js"></script>
     <audio id="audio_player"></audio>
     <div id='timer' class='timer'>00:00</div>
-    <div>
-        <canvas id="analyser_render"></canvas>
+    <div id="analyser_render">
+        <canvas id="analyser_render_canvas"></canvas>
     </div>
+    <br><br><br><br>
     <div>
         <input type="range" id="volume" min=1 max=100>
     </div>
-    <br>
     <div id='wave'></div>
     <div id="rangeDiv">
         <input type="range" min="0" max="0" class="treckProgressBar" id="treckProgressBar" />
     </div>
-    <div id='progress-bar'></div>
-
+  <div id=buttonsDiv>
     <button id='buttonPlay' class='button'>
         <i class="fa fa-play"></i>
     </button>
@@ -40,7 +43,7 @@
     </button>
     <button id='inputFileDiv' class="fa fa-eject" align="down">
     </button>
-    <br>
+    </div>
 
     <script>
     </script>

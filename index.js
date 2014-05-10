@@ -1,7 +1,7 @@
 //audio object
 window.onload = (function () {
-	var wavesurfer = Object.create(WaveSurfer);
-
+/*	var wavesurfer = Object.create(WaveSurfer);
+*/
 
 	var editProgressBar = true;
 	//Define Objects
@@ -70,7 +70,7 @@ window.onload = (function () {
 				rows[i].id = i;
 				rowTd = rows[i].getElementsByTagName('td');
 				//add track number to table
-				rowTd[0].textContent = i;
+				rowTd[0].textContent = i+".";
 			}
 		},
 		addPlayStopCssClass: function (playingTrackId) {
@@ -161,13 +161,6 @@ window.onload = (function () {
 			var tdTreckDuration = new td;
 			var tr = new tr;
 			var tb = document.getElementById('tbody')
-				//console.log(files[file])
-			tr.onmouseover = function () {
-				this.style.fontWeight = 'bold'
-			}
-			tr.onmouseout = function () {
-				this.style.fontWeight = ''
-			}
 			//tr.id = files[file];
 			tr.ondblclick = function () {
 
@@ -230,7 +223,7 @@ window.onload = (function () {
 
 		},
 		graphicEqualiser: function () {
-			var analyser_render_c = document.getElementById('analyser_render');
+			var analyser_render_c = document.getElementById('analyser_render_canvas');
 			analyser_render_c.innerHTML = '';
 			initMp3Player();
 
@@ -242,7 +235,7 @@ window.onload = (function () {
 				//document.getElementById('audio_box').appendChild(audio);
 				context = new webkitAudioContext(); // AudioContext object instance
 				analyser = context.createAnalyser(); // AnalyserNode method
-				canvas = document.getElementById('analyser_render');
+				canvas = document.getElementById('analyser_render_canvas');
 				canvas.innerHTML = '';
 				ctx = canvas.getContext('2d');
 				// Re-route audio playback into the processing graph of the AudioContext
@@ -259,7 +252,7 @@ window.onload = (function () {
 				analyser.getByteFrequencyData(fbc_array);
 				//console.log(fbc_array)
 				ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-				ctx.fillStyle = '#00CCFF'; // Color of the bars
+				ctx.fillStyle = '#14dc14'; // Color of the bars
 				bars = 100;
 				for (var i = 0; i < bars; i++) {
 					bar_x = i * 3;
@@ -283,7 +276,7 @@ window.onload = (function () {
 			audio.addEventListener('loadedmetadata', function () {
 				progressBar.max = audio.duration;
 			});
-			playlist.waveSerferLoadTreck();
+			//playlist.waveSerferLoadTreck();
 			//setup progress bar
 			progressBar = document.getElementById('treckProgressBar');
 
