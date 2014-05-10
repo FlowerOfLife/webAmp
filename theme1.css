@@ -2,7 +2,13 @@
     font-family: Gruppo;
     src: url(Gruppo-Regular.ttf);
 }
-
+@font-face {
+    font-family: Digital;
+    src: url(Digital.ttf);
+}
+body {
+    margin: 0;
+}
 input[type="range"] {
     background-image: -webkit-linear-gradient(left, hsla(0, 0%, 100%, .1) 45%, transparent 45%), -webkit-linear-gradient(hsla(0, 0%, 0%, .1), hsla(0, 0%, 100%, .1)), -webkit-linear-gradient(left, #b0c43c, #f66);
     background-size: 3px 3px, 100% 100%, 100% 100%;
@@ -46,6 +52,8 @@ button:active {
 }
 #panel {
     background-color: slategrey;
+    padding: 10px;
+    box-shadow: inset 0px 0px 13px 1px white,inset 0px 0px 9px 6px black;
 }
 #buttonsDiv {
     background-image: -webkit-linear-gradient(left, hsla(0, 0%, 100%, .1) 45%, transparent 45%), -webkit-linear-gradient(hsla(0, 0%, 0%, .1), hsla(0, 0%, 100%, .1)), -webkit-linear-gradient(left, #5F5F5F, #646464);
@@ -55,77 +63,80 @@ button:active {
     width: 201px;
     margin: 10px;
 }
-
-#analyser_render_canvas{
-  float: right;
-      box-shadow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 2px 2px 1px hsla(0, 0%, 100%, .5), 0 -2px 10px 2px hsla(0, 0%, 100%, .75), 0 2px 10px 2px hsla(0, 0%, 0%, .25);
-      width: 313px;
-      height: 47px;
-      margin: 10px;
-      padding-right: 1px;
-      padding-left: 2px;
-  border-radius: 8px;
+#analyser_render_canvas {
+    float: left;
+    box-shadow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 2px 2px 1px hsla(0, 0%, 100%, .5), 0 -2px 10px 2px hsla(0, 0%, 100%, .75), 0 2px 10px 2px hsla(0, 0%, 0%, .25);
+    width: 32%;
+    height: 48px;
+    margin: 10px;
+    padding-right: 1px;
+    padding-left: 2px;
+    border-radius: 8px;
 }
-
-#treckProgressBar{
-  width: 97%;
-  margin: 10px;
-  /* margin-right: -8px; */
-  height: 2px;
+#treckProgressBar {
+    width: 97%;
+    margin: 10px;
+    margin-right: -8px;
+    height: 2px;
 }
-
-#timer{
-  font-family: Gruppo;
-  margin: 10px;
-       
-  float: left;
-  box-shadow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 2px 2px 1px hsla(0, 0%, 100%, .5), 0 -2px 10px 2px hsla(0, 0%, 100%, .75), 0 2px 10px 2px hsla(0, 0%, 0%, .25);
-  
-  
-  font-size: 40px;
-  border-radius: 8px;
-  width: 93px;
-  color: #14dc14;
+#timer {
+    font-family: Gruppo;
+    margin: 10px;
+    font-family: Digital;
+    float: left;
+    box-shadow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 2px 2px 1px hsla(0, 0%, 100%, .5), 0 -2px 10px 2px hsla(0, 0%, 100%, .75), 0 2px 10px 2px hsla(0, 0%, 0%, .25);
+    font-size: 40px;
+    border-radius: 8px;
+    width: 93px;
+    height: 48px;
+    color: #14dc14;
 }
-
-#volume{
-  margin: 10px;
-  float: left;
+#volume {
+    margin: 10px;
+    width: 199px;
+    float: left;
 }
-
-#playlistTable{
-  font-family: Gruppo;
-   
-  width: 95%;
-  margin: 10px;
-  box-shadow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 2px 2px 1px hsla(0, 0%, 100%, .5), 0 -2px 10px 2px hsla(0, 0%, 100%, .75), 0 2px 10px 2px hsla(0, 0%, 0%, .25);
- 
+#volume::-webkit-slider-thumb {
+    border-radius: 3px;
+    width: 10px;
 }
- td{
-   border-width:0px;
+#playlistTable {
+    font-family: Gruppo;
+    width: 95%;
+    margin: 10px;
+    box-shad-ow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 -1px 2px 1px hsla(0, 0%, 100%, .5), 0 0px 0px 0px hsla(0, 0%, 100%, 2.75), 0 0px 24px 6px hsla(0, 0%, 0%, .25);
 }
- tr{
-   
-   border-width:0px;
+td {
+    border-width: 0px;
 }
-
-tr:hover{
-   font-weight:900;
-   text-shadow: 0px 0px 8px rgb(163, 163, 163);
+tr {
+    transition: .5s;
+    border-width: 0px;
 }
-
- th{
-   width:1px;
+tr:hover {
+    font-weight: 900;
+    font-size: 16px;
+    text-shadow: 0px 0px 8px rgb(163, 163, 163);
+    transition: .5s;
+    cursor: pointer;
 }
-.Paused{
-
+th {
+    width: 1px;
 }
-
-.Playing{
-   font-weight:900;
-   color: #14dc14;
-   text-shadow: 0px 0px 8px rgb(163, 163, 163);
+.Paused {} .Playing {
+    font-weight: 900;
+    color: #14dc14;
+    text-shadow: 0px 0px 8px rgb(163, 163, 163);
 }
-
-
-
+#runningText {
+    width: 97%;
+    height: 24px;
+    margin: 10px;
+    font-family: Digital;
+    font-size: 22px;
+    color: #14dc14;
+    box-shadow: 0px 0px 5px 1px black, 0px 0px 8px 3px white;
+    border-radius: 5px;
+    float: left;
+}
+/* Make it a marquee */
