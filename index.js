@@ -70,7 +70,7 @@ window.onload = (function () {
                 rows[i].id = i;
                 rowTd = rows[i].getElementsByTagName('td');
                 //add track number to table
-                rowTd[0].textContent = i + ".";
+                rowTd[0].textContent = (i - 1) + ".";
             }
         },
         addPlayStopCssClass: function (playingTrackId) {

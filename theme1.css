@@ -43,7 +43,7 @@ button {
     border-color: rgb(63, 63, 63);
     border-width: 1px;
     border-radius: 33px;
-    height: 35px;
+    height: 23px;
     width: 35px;
 }
 button:active {
@@ -51,9 +51,9 @@ button:active {
     box-shadow: 0px 0px 2px -1px black;
 }
 #panel {
-    background-color: slategrey;
+    background-color: rgb(12, 231, 222);
     padding: 10px;
-    box-shadow: inset 0px 0px 13px 1px white,inset 0px 0px 9px 6px black;
+    box-shadow: inset 0px 0px 13px 1px white, inset 0px 0px 9px 6px black;
 }
 #buttonsDiv {
     background-image: -webkit-linear-gradient(left, hsla(0, 0%, 100%, .1) 45%, transparent 45%), -webkit-linear-gradient(hsla(0, 0%, 0%, .1), hsla(0, 0%, 100%, .1)), -webkit-linear-gradient(left, #5F5F5F, #646464);
@@ -64,10 +64,12 @@ button:active {
     margin: 10px;
 }
 #analyser_render_canvas {
+    background-image: -webkit-linear-gradient(left, hsla(0, 0%, 100%, .1) 45%, transparent 45%), -webkit-linear-gradient(hsla(0, 0%, 0%, .1), hsla(0, 0%, 100%, .1)), -webkit-linear-gradient(left, #5F5F5F, #646464);
+    background-size: 3px 3px, 100% 100%, 100% 100%;
     float: left;
     box-shadow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 2px 2px 1px hsla(0, 0%, 100%, .5), 0 -2px 10px 2px hsla(0, 0%, 100%, .75), 0 2px 10px 2px hsla(0, 0%, 0%, .25);
-    width: 32%;
-    height: 48px;
+    width: 48%;
+    height: 39px;
     margin: 10px;
     padding-right: 1px;
     padding-left: 2px;
@@ -80,6 +82,8 @@ button:active {
     height: 2px;
 }
 #timer {
+    background-image: -webkit-linear-gradient(left, hsla(0, 0%, 100%, .1) 45%, transparent 45%), -webkit-linear-gradient(hsla(0, 0%, 0%, .1), hsla(0, 0%, 100%, .1)), -webkit-linear-gradient(left, #5F5F5F, #646464);
+    background-size: 3px 3px, 100% 100%, 100% 100%;
     font-family: Gruppo;
     margin: 10px;
     font-family: Digital;
@@ -88,7 +92,7 @@ button:active {
     font-size: 40px;
     border-radius: 8px;
     width: 93px;
-    height: 48px;
+    height: 39px;
     color: #14dc14;
 }
 #volume {
@@ -101,15 +105,21 @@ button:active {
     width: 10px;
 }
 #playlistTable {
+    background-image: -webkit-linear-gradient(left, hsla(0, 0%, 100%, .1) 45%, transparent 45%), -webkit-linear-gradient(hsla(0, 0%, 0%, .1), hsla(0, 0%, 100%, .1)), -webkit-linear-gradient(left, #5F5F5F, #646464);
+    background-size: 3px 3px, 100% 100%, 100% 100%;
+    color: white;
     font-family: Gruppo;
     width: 95%;
-    margin: 10px;
-    box-shad-ow: inset 0 1px 4px hsla(0, 0%, 0%, .5), inset 0 0 10px hsla(0, 0%, 0%, .5), 0 0 0 1px hsla(0, 0%, 0%, .1), 0 -1px 2px 1px hsla(0, 0%, 0%, .25), 0 -1px 2px 1px hsla(0, 0%, 100%, .5), 0 0px 0px 0px hsla(0, 0%, 100%, 2.75), 0 0px 24px 6px hsla(0, 0%, 0%, .25);
+    margin: 14px;
+    margin-top: 22px;
+    margin-bottom: 21px;
+    box-shadow: 0px 0px 5px 1px black, 0px 0px 8px 3px white;
 }
 td {
     border-width: 0px;
 }
 tr {
+    font-weight: 300;
     transition: .5s;
     border-width: 0px;
 }
@@ -129,11 +139,13 @@ th {
     text-shadow: 0px 0px 8px rgb(163, 163, 163);
 }
 #runningText {
+    background-image: -webkit-linear-gradient(left, hsla(0, 0%, 100%, .1) 45%, transparent 45%), -webkit-linear-gradient(hsla(0, 0%, 0%, .1), hsla(0, 0%, 100%, .1)), -webkit-linear-gradient(left, #5F5F5F, #646464);
+    background-size: 3px 3px, 100% 100%, 100% 100%;
     width: 97%;
     height: 24px;
     margin: 10px;
     font-family: Digital;
-    font-size: 22px;
+    font-size: 23px;
     color: #14dc14;
     box-shadow: 0px 0px 5px 1px black, 0px 0px 8px 3px white;
     border-radius: 5px;
