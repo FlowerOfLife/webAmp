@@ -7,66 +7,67 @@
 <link href='Gruppo-Regular.ttf' rel='stylesheet' type='text/css'>
 <link href='Digital.ttf' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="theme1.css">
-<script src="http://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+<script src="sorttable.js"></script>
 
 <style>
+	
 </style>
 <div id='Panel'>
-    <script src="index.js"></script>
-    <audio id="audio_player"></audio>
-    <marquee behavior="scroll" direction="left" id="runningText">Welcome To HTML5 CSS3 mp3 Player</marquee>
-    <div id='timer' class='timer'>00:00</div>
-    <div id="analyser_render">
-        <canvas id="analyser_render_canvas"></canvas>
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div>
-        <input type="range" id="volume" min=1 max=100>
-    </div>
-    <div id='wave'></div>
-    <div id="rangeDiv">
-        <input type="range" min="0" max="0" class="treckProgressBar" id="treckProgressBar" />
-    </div>
-    <div id=buttonsDiv>
-        <button id='buttonPlay' class='button'>
-            <i class="fa fa-play"></i>
-        </button>
-        <button id='buttonStop' class='button'>
-            <i class="fa fa-pause"></i>
-        </button>
-        <button id='buttonBackword' class='button'>
-            <i class="fa fa-backward"></i>
-        </button>
-        <button id='buttonForword'>
-            <i class="fa fa-forward"></i>
-        </button>
-        <button id='inputFileDiv' class="fa fa-eject" align="down">
-        </button>
-    </div>
+	<script src="index.js"></script>
+	<audio id="audio_player"></audio>
+	<marquee behavior="scroll" direction="left" id="runningText">Welcome To HTML5 CSS3 mp3 Player</marquee>
+	<div id='timer' class='timer'>00:00</div>
+	<div id="analyser_render">
+		<canvas id="analyser_render_canvas">scroll</canvas>
+	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div>
+		<input type="range" id="volume" min=1 max=100>
+	</div>
+	<div id='wave'></div>
+	<div id="rangeDiv">
+		<input type="range" min="0" max="0" class="treckProgressBar" id="treckProgressBar" />
+	</div>
+	<div id=buttonsDiv>
+		<button id='buttonPlay' class='button'>
+			<i class="fa fa-play"></i>
+		</button>
+		<button id='buttonStop' class='button'>
+			<i class="fa fa-pause"></i>
+		</button>
+		<button id='buttonBackword' class='button'>
+			<i class="fa fa-backward"></i>
+		</button>
+		<button id='buttonForword'>
+			<i class="fa fa-forward"></i>
+		</button>
+		<button id='inputFileDiv' class="fa fa-eject" align="down">
+		</button>
+	</div>
 
-    <script>
-    </script>
-    <table id=playListTable class="sortable">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Title</th>
-                <th>artist</th>
-                <th>time</th>
-            </tr>
-        </thead>
-        <tbody id='tbody'>
-            <tr style="display:none">
-                <td>No</td>
-                <td>Title</td>
-                <td>artist</td>
-                <td>time</td>
-            </tr>
-        </tbody>
-    </table>
+	<script>
+	</script>
+	<table id=playListTable class="sortable">
+		<thead>
+			<tr>
+				<th>No</th>
+				<th>Title</th>
+				<th>artist</th>
+				<th>time</th>
+			</tr>
+		</thead>
+		<tbody id='tbody'>
+			<tr style="display:none">
+				<td>No</td>
+				<td>Title</td>
+				<td>artist</td>
+				<td>time</td>
+			</tr>
+		</tbody>
+	</table>
 
 </div>
 <input id='openFileButton' type='file' multiple=true style="display:none">
