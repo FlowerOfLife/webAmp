@@ -1,0 +1,281 @@
+<script src="beatdetector.js"></script>
+<div id="bpmOutput"></div>
+<canvas id='canvas'></canvas>
+<div style="overflow: auto;">
+	<canvas id="spectrum" width="1200" height="280" style="background-color: #303030; display: block;"></canvas>
+</div>
+<canvas id="audiodatacanvas" width=1 height=160 style="background-color: #EEE; display: block;"></canvas>
+<canvas id="spectrogramcanvas" width=1 height=256 style="background-color: #000; display: block;"></canvas>
+<div id="cursor" style="position: absolute; top: 0px; left: -1px; background-color: black; width: 1px; height: 100%; border: 1px solid white; border-top: none; border-bottom: none;"></div>
+<script>
+	//var samples = 128;
+	/*	//audio context 
+	var buf; //audio buffer 
+	var fft; //fft audio node 
+	var samples = 128;
+	var setup = false; //indicate if audio is set up yet 
+	
+	var source;
+	
+	var currentBuffer;*/
+	var duration;
+	//beat detector
+	var startTime = Date.now();
+	var bd = new BeatDetektor(50, 200);
+
+	var myAudioContext = new webkitAudioContext();
+	var sgramcanvas = window.document.querySelector('#spectrogramcanvas');
+	//window.addEventListener('load', startProcess, false);
+	//bd.process(myAudioContext.currentTime, leftChannel);
+	//load the mp3 file 
+
+	function loadFile(fileToLoad) {
+		//httpxmlobject - get audio file
+		var req = new XMLHttpRequest();
+		req.open("GET", fileToLoad, true);
+		req.responseType = "arraybuffer";
+		req.onload = function () {
+			startProcess(req);
+			//decode the loaded data 
+		};
+		req.send();
+	};
+	//start Process
+	loadFile("01.mp3");
+	var timeratio = 30;
+	var waveformtimer = null;
+	var sgramtimer = null;
+
+	function startProcess(req) {
+		playAudio(req);
+		getBeat(myAudioContext);
+		//setupCanvas()
+
+		//setInterval(updateSpectrum, 1000 / 30);
+
+	}
+	var src = myAudioContext.createBufferSource();
+
+	function playAudio(req) {
+		myAudioContext.decodeAudioData(req.response, function (buffer) {
+			//duration = buffer.duration;
+			drowSpectumAnalizer(buffer);
+			//add buffer from myAudioContext
+			src.buffer = buffer;
+			//get Duration
+			duration = buffer.duration;
+			console.log(buffer.duration)
+			//get sample Rate
+			console.log(buffer.sampleRate)
+			src.gain.value = 0.01;
+			console.log('aaa')
+			src.connect(myAudioContext.destination);
+			src.start(0);
+		});
+	}
+
+	setTimeout(function () {
+		//startProcess()
+		//setupCanvas();
+	}, 1000);
+
+	function getBeat(myAudioContext) {
+		//create JavaScriptNode
+		var jsnode = myAudioContext.createJavaScriptNode(1024, 1, 1);
+		//connect node
+		jsnode.connect(myAudioContext.destination);
+		//progress event
+		jsnode.onaudioprocess = function (e) {
+			//calculate BPM
+			var currentTime = (e.timeStamp - startTime) / 1000;
+			var leftChannel = e.inputBuffer.getChannelData(0);
+			bd.process(myAudioContext.currentTime, leftChannel);
+			//show BPM
+			bpmOutput.textContent = bd.win_bpm_int / 10 + " BPM" + currentTime;
+		};
+	}
+
+
+
+
+
+	var fft = myAudioContext.createAnalyser();
+	fft.smoothingTimeConstant = 0.6;
+	var fftData = new Uint8Array(fft.frequencyBinCount);
+
+	var frameSize = 1024;
+
+	var jsnode = myAudioContext.createJavaScriptNode(1024, 1, 1);
+	console.log(myAudioContext)
+	jsnode.connect(myAudioContext.destination);
+	jsnode.onaudioprocess = function (e) {
+		var currentTime = (e.timeStamp - startTime) / 1000;
+
+		if (duration === 0) return;
+
+
+		var leftChannel = e.inputBuffer.getChannelData(0);
+		bd.process(myAudioContext.currentTime, leftChannel);
+		bpmOutput.textContent = bd.win_bpm_int / 10 + " BPM";
+
+	};
+	var sgramcanvas = window.document.querySelector('#spectrogramcanvas');
+	var sgc = sgramcanvas.getContext('2d');
+	sgc.globalCompositeOperation = 'darker';
+	var spectrumCanvas = window.document.querySelector('#spectrum');
+	var sc = spectrumCanvas.getContext('2d');
+	var spectrumCanvas = window.document.querySelector('#spectrum');
+	var sc = spectrumCanvas.getContext('2d');
+
+	var spectrumStyle = sc.createLinearGradient(0, spectrumCanvas.height, 0, 20);
+	spectrumStyle.addColorStop(0.95, '#F00');
+	spectrumStyle.addColorStop(0.85, '#F90');
+	spectrumStyle.addColorStop(0.60, '#9F0');
+	spectrumStyle.addColorStop(0.00, '#690');
+
+	var spectrumPos = -1;
+	var updateSpectrum = function () {
+
+		var ratio = spectrumCanvas.width / fftData.length;
+
+		sc.fillStyle = 'rgba(48, 48, 48, 0.6' + /*0.55*/ ')';
+		sc.fillRect(0, 0, spectrumCanvas.width, spectrumCanvas.height);
+		sc.fillStyle = 'rgba(255, 255, 0, 0.5)';
+		sc.textAlign = 'center';
+		sc.font = '10px sans-serif';
+		sc.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+		sc.lineWidth = 1;
+		sc.beginPath();
+		/*for(var i=0; i < spectrumCanvas.width; i+=128) {
+			sc.moveTo(i+0.5, 0);
+			sc.lineTo(i+0.5, spectrumCanvas.height);
+		}*/
+
+		var odd = false;
+		for (var i = 55; i < 20000; i *= 2) {
+			//console.log(i)
+			var hz = i;
+			var peak = (hz * fft.fftSize) / myAudioContext.sampleRate;
+
+			sc.moveTo(Math.round(peak * ratio) + 0.5, 0);
+			sc.lineTo(Math.round(peak * ratio) + 0.5, spectrumCanvas.height);
+			if (hz >= 440)
+
+				sc.fillText(hz + ' Hz', peak * ratio + 5, 10 + (odd) * (10));
+			odd = !odd;
+		}
+
+		for (var i = 0; i < spectrumCanvas.height; i += 64) {
+
+			sc.moveTo(0, spectrumCanvas.height - i + 0.5);
+			sc.lineTo(spectrumCanvas.width, spectrumCanvas.height - i + 0.5);
+		}
+		sc.stroke();
+
+		fft.getByteTimeDomainData(fftData);
+		sc.strokeStyle = '#444';
+		sc.lineWidth = 4;
+		sc.beginPath();
+		for (var i = 0; i < fftData.length; i++) {
+			sc.lineTo((i) * ratio, spectrumCanvas.height - fftData[i]);
+		}
+		sc.stroke();
+
+		fft.getByteFrequencyData(fftData);
+		sc.fillStyle = 'rgba(0, 0, 0, 0.15)';
+
+		sc.strokeStyle = spectrumStyle; //'#9F0';
+		sc.lineWidth = 5;
+		sc.beginPath();
+		sc.moveTo(-10, spectrumCanvas.height + 10);
+		var maxval = 0;
+		var peak = [];
+		for (var i = 0; i < fftData.length; i += 1) {
+
+			/*var mag = Math.sqrt(fftData[i]*fftData[i] + fftData[i+1]*fftData[i+1]);
+			var lg = Math.log(mag);
+			//mag -= lg;
+			mag*= (256/360);*/
+			var mag = fftData[i];
+			sc.lineTo(i * ratio, spectrumCanvas.height - mag);
+			//sc.lineTo((i)*ratio, spectrumCanvas.height-fftData[i]);
+			if (mag > maxval && mag < Infinity) {
+				maxval = Math.max(maxval, mag);
+				peak = i;
+			}
+		}
+	};
+
+
+
+
+	var drowSpectumAnalizer = function (buffer) {
+		currentBuffer = buffer;
+		audiodatacanvas.width = sgramcanvas.width = buffer.length * (timeratio / buffer.sampleRate);
+		var adc = audiodatacanvas.getContext('2d');
+
+
+
+		var LChStyle = adc.createLinearGradient(0, 0, 0, audiodatacanvas.height / 2);
+		LChStyle.addColorStop(0.0, '#69F');
+		LChStyle.addColorStop(0.5, '#00F');
+		LChStyle.addColorStop(1.0, '#03C');
+
+		var RChStyle = adc.createLinearGradient(0, audiodatacanvas.height / 2, 0, audiodatacanvas.height);
+		RChStyle.addColorStop(0.0, '#F09');
+		RChStyle.addColorStop(0.5, 'red');
+		RChStyle.addColorStop(1.0, '#900');
+		//statusSpan.textContent = 'Done';
+		duration = buffer.duration;
+
+		var channels = [buffer.getChannelData(0), buffer.getChannelData(1)];
+		var ratio = timeratio / buffer.sampleRate;
+		var chunkSize = 16 * 1024;
+		var offset = 0;
+		var lastY = [0, 0];
+		var maxLen = channels[0].length;
+		var drawWaveform = function () {
+			console.log(channels[0].length)
+			adc.fillStyle = 'black';
+			var data = [];
+			var l = Math.min(maxLen, offset + chunkSize);
+			for (var c = 0; c < channels.length; c++) {
+				data = channels[c];
+				if (!data) continue;
+				var x = offset * ratio;
+				adc.beginPath();
+				//adc.moveTo(x, audiodatacanvas.height / 4 + (audiodatacanvas.height / 2) * c + lastY[c] * (audiodatacanvas.height / 4.1));
+
+				for (var i = offset; i < l; i += 2) {
+					adc.lineTo(x / 2, (audiodatacanvas.height / 4 + (audiodatacanvas.height / 2) * c + data[i] * (audiodatacanvas.height / 4.1)) / 2);
+					//adc.fillRect(x, audiodatacanvas.height / 2, 1, data[i] * (audiodatacanvas.height));
+					lastY[c] = data[i];
+					x = i * ratio;
+					if (x > audiodatacanvas.width) break;
+				}
+
+				if (c === 0) adc.strokeStyle = LChStyle;
+				else adc.strokeStyle = RChStyle;
+				adc.stroke();
+
+			}
+			offset += chunkSize;
+
+			if (l >= maxLen) {
+				channels[0] = null;
+				channels[1] = null;
+				data = null;
+				clearTimeout(waveformtimer);
+				return;
+			}
+
+			waveformtimer = setTimeout(drawWaveform, 0);
+		};
+
+		waveformtimer = setTimeout(drawWaveform, 0);
+		var channelData = [];
+		for (var c = 0; c < buffer.numberOfChannels; c++) {
+			channelData[c] = channels[c];
+		}
+	};
+</script>
