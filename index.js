@@ -161,7 +161,7 @@ window.onload = (function () {
             var tdTreckDuration = new td;
             var tr = new tr;
             var tb = document.getElementById('tbody')
-            //tr.id = files[file];
+                //tr.id = files[file];
             tr.ondblclick = function () {
 
                 tr.className = "playing";
@@ -279,7 +279,41 @@ window.onload = (function () {
             audio.play();
             audio.addEventListener('loadedmetadata', function () {
                 progressBar.max = audio.duration;
+                //Load Drow spectrum
+                loadDrawSpectrum(audio.src)
             });
+            var audiodatacanvas = document.querySelector('#audiodatacanvas');
+            audiodatacanvas.innerHTML = '';
+
+            function loadDrawSpectrum(fileToLoad) {
+                var myAudioContext = new webkitAudioContext();
+                var src = myAudioContext.createBufferSource();
+                //httpxmlobject - get audio file
+                console.log('in this')
+                var req = new XMLHttpRequest();
+                req.open("GET", fileToLoad, true);
+                req.responseType = "arraybuffer";
+                req.onload = function () {
+                    myAudioContext.decodeAudioData(req.response, function (buffer) {
+                        //duration = buffer.duration;
+                        playlist.drowSpectumAnalizer(buffer);
+                        //add buffer from myAudioContext
+                        src.buffer = buffer;
+                        //get Duration
+                        duration = buffer.duration;
+                        console.log(buffer.duration)
+                        //get sample Rate
+                        console.log(buffer.sampleRate)
+
+                        console.log('aaa')
+                        src.gain.value = 0.01;
+                        //src.connect(myAudioContext.destination);
+                        //src.start(0);
+                    });
+                };
+                req.send();
+
+            };
             //runningText(String)
             playlist.runningText(trackObjrct.name);
             //playlist.waveSerferLoadTreck();
@@ -310,6 +344,82 @@ window.onload = (function () {
                 }
             });
 
+        },
+        drowSpectumAnalizer: function (buffer) {
+            var timeratio = 30;
+            var waveformtimer = null;
+            var sgramtimer = null;
+
+            var audiodatacanvas = document.querySelector('#audiodatacanvas');
+            currentBuffer = buffer;
+            audiodatacanvas.width = buffer.length * (timeratio / buffer.sampleRate);
+            var adc = audiodatacanvas.getContext('2d');
+            var LChStyle = adc.createLinearGradient(0, 0, 0, audiodatacanvas.height / 2);
+            LChStyle.addColorStop(0.0, '#4b5045');
+            LChStyle.addColorStop(0.5, '#00F');
+            LChStyle.addColorStop(1.0, '#03C');
+
+            var RChStyle = adc.createLinearGradient(0, audiodatacanvas.height, 0, audiodatacanvas.height);
+            RChStyle.addColorStop(0.0, '#F09');
+            RChStyle.addColorStop(0.5, 'red');
+            RChStyle.addColorStop(1.0, '#900');
+            //statusSpan.textContent = 'Done';
+            duration = buffer.duration;
+            console.log(buffer)
+            var channels = [buffer.getChannelData(0), buffer.getChannelData(1)];
+            var ratio = timeratio / buffer.sampleRate;
+            var chunkSize = 16 * 1024;
+            var offset = 0;
+            var lastY = [0, 0];
+            var maxLen = channels[0].length;
+            var sgramcanvas = window.document.querySelector('#spectrogramcanvas');
+            var drawWaveform = function () {
+                console.log(channels[0].length)
+                adc.fillStyle = 'black';
+                var data = [];
+                var l = Math.min(maxLen, offset + chunkSize);
+                for (var c = 0; c < channels.length; c++) {
+                    data = channels[c];
+                    if (!data) continue;
+                    //beat Bars width
+                    var x = offset * ratio // 4;
+                    adc.beginPath();
+                    //adc.moveTo(x, audiodatacanvas.height / 4 + (audiodatacanvas.height / 2) * c + lastY[c] * (audiodatacanvas.height / 4.1));
+                    // sample ratio
+                    for (var i = offset; i < l; i += 100) {
+                        //adc.lineTo(x / 2, (audiodatacanvas.height / 4 + (audiodatacanvas.height / 2) * c + data[i] * (audiodatacanvas.height / 4.1)) / 2);
+                        adc.fillRect(x, audiodatacanvas.height / 2, 1, data[i] * (audiodatacanvas.height / 2));
+                        //one chanel style
+                        adc.fillStyle = "#2d5a36";
+                        lastY[c] = data[i];
+                        //spectrum width
+                        x = i * ratio // 4;
+                        if (x > audiodatacanvas.width) break;
+                    }
+
+                    if (c === 0) adc.strokeStyle = LChStyle;
+                    else adc.strokeStyle = RChStyle;
+                    adc.stroke();
+
+                }
+                offset += chunkSize;
+
+                if (l >= maxLen) {
+                    channels[0] = null;
+                    channels[1] = null;
+                    data = null;
+                    clearTimeout(waveformtimer);
+                    return;
+                }
+
+                waveformtimer = setTimeout(drawWaveform, 0);
+            };
+
+            waveformtimer = setTimeout(drawWaveform, 0);
+            var channelData = [];
+            for (var c = 0; c < buffer.numberOfChannels; c++) {
+                channelData[c] = channels[c];
+            }
         }
     }
 
