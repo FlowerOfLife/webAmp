@@ -2,8 +2,15 @@
 window.onload = (function () {
     /*	var wavesurfer = Object.create(WaveSurfer);
      */
-
+    var myAudioContext = new webkitAudioContext();
+    var src = myAudioContext.createBufferSource();
     var editProgressBar = true;
+
+    // target can be any Element or other EventTarget.
+
+
+    var renderTimeout = setInterval
+
     //Define Objects
     //Audio Object
     var audio = new Audio();
@@ -22,7 +29,7 @@ window.onload = (function () {
 
 
     var playlist = {
-
+        stopCanvas: false,
         setTimer: function (timeInSec) {
             var timer = document.getElementById('timer');
             timer.innerText = playlist.readableDuration(timeInSec);
@@ -41,7 +48,7 @@ window.onload = (function () {
             //Stop
             buttonStop.onclick = function () {
                 console.log("POU")
-                //wavesurfer.pause();
+                    //wavesurfer.pause();
                 audio.pause();
             };
             //Forword
@@ -91,9 +98,9 @@ window.onload = (function () {
             var openFileButton = document.getElementById('openFileButton');
             console.log(inputFileDiv)
             inputFileDiv.onclick = function () {
-                openFileButton.click();
-            }
-            //get files from input
+                    openFileButton.click();
+                }
+                //get files from input
             document.getElementById('openFileButton');
             //event when files open
             openFileButton.onchange = (function () {
@@ -236,20 +243,20 @@ window.onload = (function () {
 
 
             function initMp3Player() {
-                //document.getElementById('audio_box').appendChild(audio);
-                context = new webkitAudioContext(); // AudioContext object instance
-                analyser = context.createAnalyser(); // AnalyserNode method
-                canvas = document.getElementById('analyser_render_canvas');
-                canvas.innerHTML = '';
-                ctx = canvas.getContext('2d');
-                // Re-route audio playback into the processing graph of the AudioContext
-                source = context.createMediaElementSource(audio);
-                source.connect(analyser);
-                analyser.connect(context.destination);
-                frameLooper();
-            }
-            // frameLooper() animates any style of graphics you wish to the audio frequency
-            // Looping at the default frame rate that the browser provides(approx. 60 FPS)
+                    //document.getElementById('audio_box').appendChild(audio);
+                    context = new webkitAudioContext(); // AudioContext object instance
+                    analyser = context.createAnalyser(); // AnalyserNode method
+                    canvas = document.getElementById('analyser_render_canvas');
+                    canvas.innerHTML = '';
+                    ctx = canvas.getContext('2d');
+                    // Re-route audio playback into the processing graph of the AudioContext
+                    source = context.createMediaElementSource(audio);
+                    source.connect(analyser);
+                    analyser.connect(context.destination);
+                    frameLooper();
+                }
+                // frameLooper() animates any style of graphics you wish to the audio frequency
+                // Looping at the default frame rate that the browser provides(approx. 60 FPS)
             function frameLooper() {
                 window.webkitRequestAnimationFrame(frameLooper);
                 fbc_array = new Uint8Array(analyser.frequencyBinCount);
@@ -268,6 +275,8 @@ window.onload = (function () {
             }
         },
         playTrack: function (trackObjrct, tdId) {
+            var that = this
+                //this.stopCanvas = true
             playlist.volumeInput();
             //numirate tracks for forword/back
             playlist.addTracksNumbers();
@@ -278,42 +287,64 @@ window.onload = (function () {
             //audio.volume = 0.01;
             audio.play();
             audio.addEventListener('loadedmetadata', function () {
+                // console.log('in this')
                 progressBar.max = audio.duration;
-                //Load Drow spectrum
-                loadDrawSpectrum(audio.src)
             });
+            //  loadDrawSpectrum(audio.src)
             var audiodatacanvas = document.querySelector('#audiodatacanvas');
             audiodatacanvas.innerHTML = '';
 
-            function loadDrawSpectrum(fileToLoad) {
-                var myAudioContext = new webkitAudioContext();
-                var src = myAudioContext.createBufferSource();
-                //httpxmlobject - get audio file
-                console.log('in this')
-                var req = new XMLHttpRequest();
-                req.open("GET", fileToLoad, true);
-                req.responseType = "arraybuffer";
-                req.onload = function () {
-                    myAudioContext.decodeAudioData(req.response, function (buffer) {
+            var event = new Event('abortRequest');
+            document.dispatchEvent(event)
+
+
+            //httpxmlobject - get audio file
+            /*document.addEventListener('abortRequest', function () {
+    req.abort();
+}, false);*/
+            var req = new XMLHttpRequest();
+
+            req.open("GET", audio.src, true);
+            req.responseType = "arraybuffer";
+
+            clearInterval(renderTimeout)
+            renderTimeout = setInterval(
+                function () {
+                    console.log(audio.src);
+    
+            req.onload = function (res) {
+                console.log('ONLOAD');
+                that.stopCanvas = true
+                    //console.log(res)
+                myAudioContext.decodeAudioData(req.response, function (buffer) {
+                    console.log('ON_DECODED')
+                    that.stopCanvas = false
                         //duration = buffer.duration;
-                        playlist.drowSpectumAnalizer(buffer);
-                        //add buffer from myAudioContext
-                        src.buffer = buffer;
-                        //get Duration
-                        duration = buffer.duration;
-                        console.log(buffer.duration)
-                        //get sample Rate
-                        console.log(buffer.sampleRate)
-
-                        console.log('aaa')
-                        src.gain.value = 0.01;
-                        //src.connect(myAudioContext.destination);
-                        //src.start(0);
-                    });
-                };
-                req.send();
-
+                    playlist.drowSpectumAnalizer(buffer);
+                    //add buffer from myAudioContext
+                    src.buffer = buffer;
+                    //get Duration
+                    duration = buffer.duration;
+                    //console.log(buffer.duration)
+                    //get sample Rate
+                    //console.log(buffer.sampleRate);
+                    //     src.gain.value = 0.01;
+                    //src.connect(myAudioContext.destination);
+                    //src.start(0);
+                });
             };
+            req.send();
+                    
+                                    clearInterval(renderTimeout)
+                }, 3000
+            )
+            //   setTime2out(function(){xxxx();},30)
+
+            //req.abort()
+            function xxxx() {
+                req.abort()
+            }
+
             //runningText(String)
             playlist.runningText(trackObjrct.name);
             //playlist.waveSerferLoadTreck();
@@ -340,17 +371,19 @@ window.onload = (function () {
                 if (editProgressBar == true) {
                     progressBar.value = audio.currentTime;
                     playlist.setTimer(audio.currentTime)
-                    //console.log(audio.currentTime);
+                        //console.log(audio.currentTime);
                 }
             });
 
         },
         drowSpectumAnalizer: function (buffer) {
+            var that = this
+                //that.stopCanvas = false
             var timeratio = 30;
             var waveformtimer = null;
             var sgramtimer = null;
-
             var audiodatacanvas = document.querySelector('#audiodatacanvas');
+            audiodatacanvas.innerHTML = ''
             currentBuffer = buffer;
             audiodatacanvas.width = buffer.length * (timeratio / buffer.sampleRate);
             var adc = audiodatacanvas.getContext('2d');
@@ -365,7 +398,7 @@ window.onload = (function () {
             RChStyle.addColorStop(1.0, '#900');
             //statusSpan.textContent = 'Done';
             duration = buffer.duration;
-            console.log(buffer)
+            console.log('START SPECTRUM')
             var channels = [buffer.getChannelData(0), buffer.getChannelData(1)];
             var ratio = timeratio / buffer.sampleRate;
             var chunkSize = 16 * 1024;
@@ -373,12 +406,34 @@ window.onload = (function () {
             var lastY = [0, 0];
             var maxLen = channels[0].length;
             var sgramcanvas = window.document.querySelector('#spectrogramcanvas');
+
+
             var drawWaveform = function () {
-                console.log(channels[0].length)
+                //   console.log(channels[0].length)
                 adc.fillStyle = 'black';
                 var data = [];
                 var l = Math.min(maxLen, offset + chunkSize);
+
+
+                /*
+
+                */
+
+                if (that.stopCanvas == true) {
+                    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+                    maxLen = 0
+                    channels.length = 0
+                    drawWaveform = function () {
+                        //console.log('done')
+                    };
+                    // break
+                }
+                console.log(that.stopCanvas);
+
+
                 for (var c = 0; c < channels.length; c++) {
+
+                    //document.dispatchEvent(event, this);
                     data = channels[c];
                     if (!data) continue;
                     //beat Bars width
@@ -405,10 +460,11 @@ window.onload = (function () {
                 offset += chunkSize;
 
                 if (l >= maxLen) {
+                    console.log('doneEEEEEEEEEEEEE')
                     channels[0] = null;
                     channels[1] = null;
                     data = null;
-                    clearTimeout(waveformtimer);
+                    // clearTimeout(waveformtimer);
                     return;
                 }
 
@@ -425,7 +481,7 @@ window.onload = (function () {
 
 
     playlist.openFiles()
-    //  Panel.appendChild(playlist.openFiles());
+        //  Panel.appendChild(playlist.openFiles());
     window.onload = (function () {
 
         console.log('PPPPPCCC');
