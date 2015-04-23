@@ -1,0 +1,70 @@
+<div class="dropzone" id="1">
+    <div id="draggable" draggable="true" ondragstart="event.dataTransfer.setData('text/plain',null)">
+        This div is draggable
+    </div>
+</div>
+<div class="dropzone" id="2"></div>
+<div class="dropzone" id="3"></div>
+<div class="dropzone" id="4"></div>
+
+
+
+<table style="width:100%">
+    <tr class="dropzone" draggable="true" >
+        <td>Jill</td>
+        <td>Smith</td>
+        <td>50</td>
+    </tr>
+    <tr class="dropzone" draggable="true" >
+        <td>Eve</td>
+        <td>Jackson</td>
+        <td>94</td>
+    </tr>
+</table>
+
+
+<style>
+</style>
+
+<script>
+    var dragged;
+    var startDragged;
+    var endDrag;
+
+    /* events fired on the draggable target */
+    playlistDragAndDrop()
+    function playlistDragAndDrop(){
+    document.addEventListener("drag", function (event) {
+
+    }, false);
+
+    document.addEventListener("dragstart", function (event) {
+        startDragged = event.target;
+        // store a ref. on the dragged elem
+        dragged = event.target.parentElement;
+        // make it half transparent
+        //   event.target.parentElement.style.opacity = .5;
+    }, false);
+
+    document.addEventListener("dragend", function (event) {
+        // reset the transparency
+        event.target.parentElement.style.opacity = "";
+    }, false);
+
+    document.addEventListener("dragover", function (event) {
+        event.preventDefault();
+    }, false);
+    document.addEventListener("drop", function (event) {
+        event.preventDefault();
+        if (event.target.parentElement.className == "dropzone") {
+            endDrag = event.target.parentElement
+            console.log("startDrag:", startDragged, "stopDrag:", endDrag)
+            var startData = startDragged.innerHTML;
+            var endData = endDrag.innerHTML
+            startDragged.innerHTML = endData;
+            endDrag.innerHTML = startData
+        }
+
+    }, false);
+    }
+</script>

@@ -30,6 +30,45 @@ window.onload = (function () {
 
     var playlist = {
         stopCanvas: false,
+        makePlaylistDragAndDrop: function () {var dragged;
+            var startDragged;
+            var endDrag;
+            document.addEventListener("drag", function (event) {
+
+            }, false);
+
+            document.addEventListener("dragstart", function (event) {
+                startDragged = event.target;
+                // store a ref. on the dragged elem
+                dragged = event.target.parentElement;
+                // make it half transparent
+                //   event.target.parentElement.style.opacity = .5;
+            }, false);
+
+            document.addEventListener("dragend", function (event) {
+                // reset the transparency
+                event.target.parentElement.style.opacity = "";
+            }, false);
+
+            document.addEventListener("dragover", function (event) {
+                event.preventDefault();
+            }, false);
+            document.addEventListener("drop", function (event) {
+console.log(event.target.parentElement)
+                console.log("startDrag:", startDragged, "stopDrag:", endDrag)
+                event.preventDefault();
+                if (event.target.parentElement.className.indexOf('dropzone')>=0) {
+
+                    endDrag = event.target.parentElement
+                    
+                    var startData = startDragged.innerHTML;
+                    var endData = endDrag.innerHTML
+                    startDragged.innerHTML = endData;
+                    endDrag.innerHTML = startData
+                }
+
+            }, false);
+        },
         setTimer: function (timeInSec) {
             var timer = document.getElementById('timer');
             timer.innerText = playlist.readableDuration(timeInSec);
@@ -86,9 +125,9 @@ window.onload = (function () {
             for (var i = 1; i < rows.length; i++) {
                 //change class in case Play/Pouse
                 if (playingTrackId == i) {
-                    rows[i].className = 'Playing';
+                    rows[i].className = 'dropzone Playing';
                 } else {
-                    rows[i].className = 'Paused';
+                    rows[i].className = 'dropzone Paused';
                 }
             }
         },
@@ -169,12 +208,16 @@ window.onload = (function () {
             var tr = new tr;
             var tb = document.getElementById('tbody')
                 //tr.id = files[file];
+                           //  tr.className +=" dropzone" 
+                 tr.draggable="true"
             tr.ondblclick = function () {
 
-                tr.className = "playing";
+                tr.className += "playing dropzone";
+
                 playlist.playTrack(treck.file, tr.id);
 
             }
+            tr.className += "dropzone";
             tr.appendChild(tdTreckNumber);
             tr.appendChild(tdTitle);
             tr.appendChild(tdArtist);
@@ -309,38 +352,29 @@ window.onload = (function () {
 
             clearInterval(renderTimeout)
             renderTimeout = setInterval(
-                function () {
-                    console.log(audio.src);
-    
-            req.onload = function (res) {
-                console.log('ONLOAD');
-                that.stopCanvas = true
-                    //console.log(res)
-                myAudioContext.decodeAudioData(req.response, function (buffer) {
-                    console.log('ON_DECODED')
-                    that.stopCanvas = false
-                        //duration = buffer.duration;
-                    playlist.drowSpectumAnalizer(buffer);
-                    //add buffer from myAudioContext
-                    src.buffer = buffer;
-                    //get Duration
-                    duration = buffer.duration;
-                    //console.log(buffer.duration)
-                    //get sample Rate
-                    //console.log(buffer.sampleRate);
-                    //     src.gain.value = 0.01;
-                    //src.connect(myAudioContext.destination);
-                    //src.start(0);
-                });
-            };
-            req.send();
-                    
-                                    clearInterval(renderTimeout)
-                }, 3000
-            )
-            //   setTime2out(function(){xxxx();},30)
+                    function () {
+                        console.log(audio.src);
 
-            //req.abort()
+                        req.onload = function (res) {
+                            // console.log('ONLOAD');
+                            that.stopCanvas = true
+                                //console.log(res)
+                            myAudioContext.decodeAudioData(req.response, function (buffer) {
+                                //   console.log('ON_DECODED')
+                                that.stopCanvas = false
+                                    //duration = buffer.duration;
+                                playlist.drowSpectumAnalizer(buffer);
+                                //add buffer from myAudioContext
+                                src.buffer = buffer;
+                                //get Duration
+                                duration = buffer.duration;
+                            });
+                        };
+                        req.send();
+
+                        clearInterval(renderTimeout)
+                    }, 3000
+                )
             function xxxx() {
                 req.abort()
             }
@@ -413,27 +447,17 @@ window.onload = (function () {
                 adc.fillStyle = 'black';
                 var data = [];
                 var l = Math.min(maxLen, offset + chunkSize);
-
-
-                /*
-
-                */
-
                 if (that.stopCanvas == true) {
                     console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
                     maxLen = 0
                     channels.length = 0
                     drawWaveform = function () {
-                        //console.log('done')
                     };
-                    // break
                 }
                 console.log(that.stopCanvas);
 
 
                 for (var c = 0; c < channels.length; c++) {
-
-                    //document.dispatchEvent(event, this);
                     data = channels[c];
                     if (!data) continue;
                     //beat Bars width
@@ -481,7 +505,6 @@ window.onload = (function () {
 
 
     playlist.openFiles()
-        //  Panel.appendChild(playlist.openFiles());
     window.onload = (function () {
 
         console.log('PPPPPCCC');
@@ -489,5 +512,6 @@ window.onload = (function () {
     })
     playlist.graphicEqualiser();
     playlist.controlles();
-
+playlist.makePlaylistDragAndDrop()
 })
+
